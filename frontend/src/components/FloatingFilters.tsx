@@ -28,7 +28,8 @@ export function FloatingFilters({ hospitals, regions, filters, setFilters }: Flo
   };
 
   return (
-    <div className="fixed top-4 left-4 w-[320px] bg-[#0D1B22]/90 backdrop-blur-md border border-[#1A3342] rounded-xl p-5 shadow-2xl z-40 flex flex-col gap-5 max-h-[calc(100vh-2rem)] overflow-y-auto">
+    <div className="fixed top-14 left-4 w-[320px] bg-[#0D1B22]/90 backdrop-blur-md border border-[#1A3342] rounded-xl p-5 shadow-2xl z-40 flex flex-col gap-5 max-h-[calc(100vh-4.5rem)] overflow-y-auto">
+
       
       {/* Title block */}
       <div className="mb-4">

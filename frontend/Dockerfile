@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install dependencies based on package-lock.json
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci || npm install
 
 # Stage 2: Builder
 FROM node:22-alpine AS builder
