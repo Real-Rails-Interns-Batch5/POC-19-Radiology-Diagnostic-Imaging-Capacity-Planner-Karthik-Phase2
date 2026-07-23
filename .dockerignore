@@ -1,0 +1,34 @@
+# Version control
+.git
+.gitignore
+
+# Environment files
+.env
+.env*
+!.env.example
+
+# Frontend build & dependencies
+**/node_modules
+**/.next
+**/out
+**/build
+**/*.tsbuildinfo
+
+# Python artifacts & virtual environments
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/venv
+**/.venv
+**/env
+
+# Repomix & documentation dumps
+repomix-output.xml
+
+# IDE and System files
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,63 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme inline {
+  --color-obsidian: #06141B;
+  --color-navy: #0D1B22;
+  --color-cyan: #22D3EE;
+  --color-indigo: #818CF8;
+  --color-glassborder: #1A3342;
+}
+
+html, body {
+  background-color: #06141B;
+  color: #f8fafc;
+  font-family: var(--font-geist-sans), Inter, sans-serif;
+  letter-spacing: -0.015em;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Thin dark scrollbar */
+html, body, * {
+  scrollbar-width: thin;
+  scrollbar-color: #22D3EE #0D1B22;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0D1B22;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #1A3342;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #22D3EE;
+}
+
+/* Pulse animation for critical map markers */
+@keyframes pulse {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  70%  { transform: scale(1.8); opacity: 0;   }
+  100% { transform: scale(1.8); opacity: 0;   }
+}
+
+.glass-card {
+  background-color: #0D1B22;
+  border: 1px solid #1A3342;
+  border-radius: 0.5rem;
+}
+
+.active-glow {
+  box-shadow: 0 0 10px 0.5px rgba(56, 189, 248, 0.5);
+  border-color: rgba(56, 189, 248, 0.8);
+}
