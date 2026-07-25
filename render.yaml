@@ -23,7 +23,7 @@ services:
         # Wildcards are invalid with allow_credentials=True (CORS spec §3.2).
         # CORS is belt-and-suspenders here: browser calls are proxied same-origin
         # and never cross origins. This only matters for direct API access.
-        value: "http://localhost:3000,https://radiology-frontend.onrender.com"
+        value: "http://localhost:3000,http://127.0.0.1:3000,https://radiology-frontend-2xa9.onrender.com"
 
   # --- Frontend: Next.js standalone ------------------------------------------
   - type: web
@@ -48,5 +48,5 @@ services:
       - key: BACKEND_HOSTPORT
         fromService:
           type: web
-          name: radiology-backend
+          name: radiology-backend-fhal
           property: hostport

@@ -12,7 +12,7 @@ app = FastAPI(title="Radiology & Diagnostic Imaging Capacity Planner")
 _default_origins = (
     "http://localhost:3000,"
     "http://127.0.0.1:3000,"
-    "https://radiology-frontend.onrender.com"
+    "https://radiology-frontend-2xa9.onrender.com"
 )
 raw_origins = os.getenv("CORS_ORIGINS", _default_origins)
 allowed_origins = list({origin.strip() for origin in raw_origins.split(",") if origin.strip()})
