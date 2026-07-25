@@ -1,0 +1,40 @@
+# =============================================================================
+# frontend/.dockerignore
+# Applied when Docker build context is ./frontend (as set in docker-compose.yml)
+# =============================================================================
+
+# Node.js dependencies — reinstalled fresh inside the image via npm ci
+node_modules/
+
+# Next.js build output — rebuilt inside the image via npm run build
+.next/
+out/
+
+# TypeScript incremental build info
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+*.log
+
+# Documentation (not needed at runtime)
+README.md
+AGENTS.md
+CLAUDE.md
+
+# Test artifacts
+coverage/
+.pytest_cache/

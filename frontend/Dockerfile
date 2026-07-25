@@ -2,9 +2,10 @@
 FROM node:22-alpine AS deps
 WORKDIR /app
 
-# Install dependencies based on package-lock.json
+# Install dependencies strictly from package-lock.json
+# Use npm ci only — do NOT fall back to npm install (that ignores the lockfile)
 COPY package.json package-lock.json ./
-RUN npm ci || npm install
+RUN npm ci
 
 # Stage 2: Builder
 FROM node:22-alpine AS builder
@@ -32,11 +33,12 @@ ENV HOSTNAME="0.0.0.0"
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Set correct permissions for static assets and public directory
-COPY --from=builder /app/public ./public
+# Public directory (static assets — no special ownership needed)
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-# Automatically leverage output traces to reduce image size
+# Leverage Next.js output file tracing for minimal runtime image
 # https://nextjs.org/docs/advanced-features/output-file-tracing
+# Requires: next.config output: "standalone"
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 

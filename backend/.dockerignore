@@ -1,0 +1,38 @@
+# =============================================================================
+# backend/.dockerignore
+# Applied when Docker build context is ./backend (as set in docker-compose.yml)
+# =============================================================================
+
+# Python virtual environment — never copy local venv into image
+venv/
+.venv/
+env/
+
+# Python bytecode and cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+coverage/
+.coverage
+*.egg-info/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+*.log
+
+# Documentation (not needed at runtime)
+README.md
