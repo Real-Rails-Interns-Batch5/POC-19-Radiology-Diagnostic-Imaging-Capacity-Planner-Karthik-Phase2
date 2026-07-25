@@ -43,10 +43,5 @@ services:
         value: production
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
-      # Render resolves this on every Blueprint sync, so a newly created backend
-      # never requires a manually copied or stale public onrender.com URL.
-      - key: BACKEND_HOSTPORT
-        fromService:
-          type: web
-          name: radiology-backend-fhal
-          property: hostport
+      - key: BACKEND_URL
+        value: https://radiology-backend-fhal.onrender.com

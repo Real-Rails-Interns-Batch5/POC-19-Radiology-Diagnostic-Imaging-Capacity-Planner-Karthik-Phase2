@@ -30,6 +30,15 @@ app.include_router(regions.router, prefix="/api")
 app.include_router(equipment.router, prefix="/api")
 app.include_router(kpis.router, prefix="/api")
 
+@app.get("/")
+def root():
+    return {
+        "status": "ok",
+        "project": "Radiology Capacity Planner",
+        "data_source": "synthetic_mock",
+        "message": "API root"
+    }
+
 @app.get("/health")
 def health_check():
     return {
