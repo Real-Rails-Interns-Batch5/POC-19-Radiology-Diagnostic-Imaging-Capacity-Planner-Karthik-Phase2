@@ -1,4 +1,4 @@
-﻿# render.yaml — Render Blueprint Spec
+# render.yaml — Render Blueprint Spec
 # Docs: https://render.com/docs/blueprint-spec
 #
 # Architecture: rewrite-proxy pattern
@@ -50,8 +50,9 @@ services:
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
       - key: BACKEND_URL
-        # MANUAL SYNC POINT: this must match the backend service URL exactly.
-        # Render does not support fromService URL references for Docker services,
-        # so if the backend service is renamed or its URL changes, update this
-        # value here too. The format is always https://<service-name>.onrender.com
-        value: "https://radiology-backend.onrender.com"
+        # MANUAL SYNC POINT: Render appends a random hash to service URLs when the
+        # service name is already taken or when created via Blueprint for the first time.
+        # Current live URL: https://radiology-backend-wc8z.onrender.com
+        # If you recreate the backend service, update this value to the new URL.
+        # Find it: Render Dashboard → radiology-backend → Settings → URL.
+        value: "https://radiology-backend-wc8z.onrender.com"
