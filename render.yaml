@@ -3,7 +3,7 @@
 #
 # Architecture: rewrite-proxy pattern
 #   - Browser calls relative /api/* paths on the frontend (same-origin).
-#   - Next.js server proxies these to BACKEND_URL at runtime.
+#   - Next.js server proxies these to the backend over Render's private network.
 #   - No CORS needed from browser; no build-arg needed for the frontend image.
 
 services:
@@ -18,10 +18,6 @@ services:
     plan: free              # Upgrade to starter/standard for production
     healthCheckPath: /health  # Route confirmed: @app.get("/health") in backend/main.py
     envVars:
-      - key: PORT
-        # Render injects PORT automatically; declaring it here makes the binding
-        # explicit. The CMD uses ${PORT:-8000} so this value is used correctly.
-        value: "8000"
       - key: CORS_ORIGINS
         # Explicit comma-separated list — no wildcards.
         # Wildcards are invalid with allow_credentials=True (CORS spec §3.2).
@@ -43,16 +39,14 @@ services:
     # The Next.js server returns a static HTML shell independently of the backend.
     healthCheckPath: /
     envVars:
-      - key: PORT
-        value: "3000"
       - key: NODE_ENV
         value: production
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
-      - key: BACKEND_URL
-        # MANUAL SYNC POINT: Render appends a random hash to service URLs when the
-        # service name is already taken or when created via Blueprint for the first time.
-        # Current live URL: https://submarine-cable-backend.onrender.com
-        # If you recreate the backend service, update this value to the new URL.
-        # Find it: Render Dashboard → submarine-cable-backend → Settings → URL.
-        value: "https://submarine-cable-backend.onrender.com"
+      # Render resolves this on every Blueprint sync, so a newly created backend
+      # never requires a manually copied or stale public onrender.com URL.
+      - key: BACKEND_HOSTPORT
+        fromService:
+          type: web
+          name: radiology-backend
+          property: hostport

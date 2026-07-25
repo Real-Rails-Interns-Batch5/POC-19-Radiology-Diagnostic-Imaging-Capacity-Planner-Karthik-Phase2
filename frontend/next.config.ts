@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
-// BACKEND_URL is read at runtime by the Next.js server process — it is never
-// baked into the client-side JS bundle, so Render's runtime env injection works
-// The /api route handler reads it for each request.
+// The API route handler reads BACKEND_URL/BACKEND_HOSTPORT at runtime. Neither
+// value is baked into the client-side bundle.
 const nextConfig: NextConfig = {
   output: "standalone",
 

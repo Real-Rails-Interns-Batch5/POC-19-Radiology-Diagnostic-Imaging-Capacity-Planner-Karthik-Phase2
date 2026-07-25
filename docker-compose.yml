@@ -25,7 +25,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      # No build args needed — BACKEND_URL is a runtime env var, read by next.config.ts
+      # No build args needed — BACKEND_URL is read by the API route at runtime.
       # Proxying is handled by the /api route handler at runtime.
     container_name: radiology-frontend
     restart: unless-stopped
@@ -40,7 +40,7 @@ services:
       # (Mac/Windows) and native Linux Docker — host.docker.internal requires
       # extra_hosts: [host.docker.internal:host-gateway] on Linux and is unnecessary
       # here since both services share radiology-network in this same compose file.
-      - BACKEND_URL=${BACKEND_URL:-http://backend:8000}
+      - BACKEND_URL=http://backend:8000
     depends_on:
       backend:
         condition: service_healthy
