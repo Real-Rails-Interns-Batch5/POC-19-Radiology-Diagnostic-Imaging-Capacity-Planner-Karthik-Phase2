@@ -1,4 +1,7 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// API_BASE is intentionally empty — all calls use relative /api/* paths.
+// Next.js rewrites() in next.config.ts proxy them to BACKEND_URL at runtime.
+// This avoids the build-time vs runtime problem with NEXT_PUBLIC_* variables on Render.
+const API_BASE = "";
 
 export interface Hospital {
   id: string;

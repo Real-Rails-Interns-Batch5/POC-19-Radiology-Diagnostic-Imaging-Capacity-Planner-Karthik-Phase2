@@ -5,9 +5,17 @@ from routers import hospitals, regions, equipment, kpis
 
 app = FastAPI(title="Radiology & Diagnostic Imaging Capacity Planner")
 
-# Support comma-separated CORS origins from environment with a safe local fallback
-raw_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")
-allowed_origins = [origin.strip() for origin in raw_origins.split(",") if origin.strip()]
+# Read CORS origins from env as a comma-separated list.
+# The production frontend URL is included here as a literal — no wildcards.
+# Wildcards are incompatible with allow_credentials=True per the CORS spec.
+# Default covers local development only; production sets CORS_ORIGINS in render.yaml.
+_default_origins = (
+    "http://localhost:3000,"
+    "http://127.0.0.1:3000,"
+    "https://radiology-frontend.onrender.com"
+)
+raw_origins = os.getenv("CORS_ORIGINS", _default_origins)
+allowed_origins = list({origin.strip() for origin in raw_origins.split(",") if origin.strip()})
 
 app.add_middleware(
     CORSMiddleware,

@@ -10,6 +10,7 @@ services:
     env_file:
       - .env
     environment:
+      # Explicit comma-separated list — no wildcards (required when allow_credentials=True).
       - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
     healthcheck:
       test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")'"]
@@ -24,12 +25,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      args:
-        # NEXT_PUBLIC_API_URL is baked into the JS bundle at build time.
-        # For local Docker dev, the browser calls port 8000 on the host machine
-        # (mapped via "8000:8000"), so http://localhost:8000 is correct here.
-        # For production, set this to https://api.yourdomain.com in your .env file.
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      # No build args needed — BACKEND_URL is a runtime env var, read by next.config.ts
+      # rewrites() on the Next.js server process, never baked into the client bundle.
     container_name: radiology-frontend
     restart: unless-stopped
     ports:
@@ -38,6 +35,12 @@ services:
       - .env
     environment:
       - PORT=3000
+      # BACKEND_URL points to the backend *service name* on the shared Docker network.
+      # Using the service name (http://backend:8000) is portable across Docker Desktop
+      # (Mac/Windows) and native Linux Docker — host.docker.internal requires
+      # extra_hosts: [host.docker.internal:host-gateway] on Linux and is unnecessary
+      # here since both services share radiology-network in this same compose file.
+      - BACKEND_URL=${BACKEND_URL:-http://backend:8000}
     depends_on:
       backend:
         condition: service_healthy

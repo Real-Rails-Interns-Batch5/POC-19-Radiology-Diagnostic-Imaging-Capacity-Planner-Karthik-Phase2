@@ -14,8 +14,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ARG NEXT_PUBLIC_API_URL
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+# NEXT_PUBLIC_API_URL is NOT used — see next.config.ts rewrites() for the proxy pattern.
+# BACKEND_URL is injected at runtime by Render (or docker compose), never at build time.
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
@@ -46,4 +46,6 @@ USER nextjs
 
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+# Use sh -c so $PORT is expanded by the shell at container startup.
+# Render injects PORT as a runtime env var; Next.js standalone server.js reads it.
+CMD ["sh", "-c", "node server.js"]

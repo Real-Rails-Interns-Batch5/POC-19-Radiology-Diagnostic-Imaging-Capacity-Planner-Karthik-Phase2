@@ -1,0 +1,57 @@
+﻿# render.yaml — Render Blueprint Spec
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Architecture: rewrite-proxy pattern
+#   - Browser calls relative /api/* paths on the frontend (same-origin).
+#   - Next.js server proxies these to BACKEND_URL at runtime.
+#   - No CORS needed from browser; no build-arg needed for the frontend image.
+
+services:
+  # --- Backend: FastAPI -------------------------------------------------------
+  - type: web
+    name: radiology-backend
+    runtime: docker
+    region: oregon          # Both services pinned to oregon — keeps intra-service
+                            # proxy latency low and billing predictable.
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free              # Upgrade to starter/standard for production
+    healthCheckPath: /health  # Route confirmed: @app.get("/health") in backend/main.py
+    envVars:
+      - key: PORT
+        # Render injects PORT automatically; declaring it here makes the binding
+        # explicit. The CMD uses ${PORT:-8000} so this value is used correctly.
+        value: "8000"
+      - key: CORS_ORIGINS
+        # Explicit comma-separated list — no wildcards.
+        # Wildcards are invalid with allow_credentials=True (CORS spec §3.2).
+        # CORS is belt-and-suspenders here: browser calls are proxied same-origin
+        # and never cross origins. This only matters for direct API access.
+        value: "http://localhost:3000,https://radiology-frontend.onrender.com"
+
+  # --- Frontend: Next.js standalone ------------------------------------------
+  - type: web
+    name: radiology-frontend
+    runtime: docker
+    region: oregon          # Must match backend region for lowest proxy latency.
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    # Health check on / is safe: page.tsx is "use client" (no SSR data fetches).
+    # layout.tsx only sets fonts + metadata — no fetch calls.
+    # No loading.tsx, no middleware.ts, no server components with fetch exist.
+    # The Next.js server returns a static HTML shell independently of the backend.
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: "3000"
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - key: BACKEND_URL
+        # MANUAL SYNC POINT: this must match the backend service URL exactly.
+        # Render does not support fromService URL references for Docker services,
+        # so if the backend service is renamed or its URL changes, update this
+        # value here too. The format is always https://<service-name>.onrender.com
+        value: "https://radiology-backend.onrender.com"
