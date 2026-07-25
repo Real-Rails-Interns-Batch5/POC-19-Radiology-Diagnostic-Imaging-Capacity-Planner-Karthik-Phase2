@@ -52,7 +52,7 @@ services:
       - key: BACKEND_URL
         # MANUAL SYNC POINT: Render appends a random hash to service URLs when the
         # service name is already taken or when created via Blueprint for the first time.
-        # Current live URL: https://radiology-backend-wc8z.onrender.com
+        # Current live URL: https://submarine-cable-backend.onrender.com
         # If you recreate the backend service, update this value to the new URL.
-        # Find it: Render Dashboard → radiology-backend → Settings → URL.
-        value: "https://radiology-backend-wc8z.onrender.com"
+        # Find it: Render Dashboard → submarine-cable-backend → Settings → URL.
+        value: "https://submarine-cable-backend.onrender.com"

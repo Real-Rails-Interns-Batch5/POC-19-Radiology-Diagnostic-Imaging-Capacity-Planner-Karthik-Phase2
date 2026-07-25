@@ -2,22 +2,9 @@ import type { NextConfig } from "next";
 
 // BACKEND_URL is read at runtime by the Next.js server process — it is never
 // baked into the client-side JS bundle, so Render's runtime env injection works
-// correctly. Falls back to localhost for local Docker Compose development.
-const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:8000";
-
+// The /api route handler reads it for each request.
 const nextConfig: NextConfig = {
   output: "standalone",
-
-  async rewrites() {
-    return [
-      {
-        // All /api/* calls from the browser are forwarded server-side to the backend.
-        // From the browser's perspective these are same-origin, so no CORS needed.
-        source: "/api/:path*",
-        destination: `${BACKEND_URL}/api/:path*`,
-      },
-    ];
-  },
 
   async headers() {
     return [

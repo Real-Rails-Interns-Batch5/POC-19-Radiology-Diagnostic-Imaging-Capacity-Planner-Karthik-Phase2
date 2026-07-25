@@ -1,5 +1,5 @@
 // API_BASE is intentionally empty — all calls use relative /api/* paths.
-// Next.js rewrites() in next.config.ts proxy them to BACKEND_URL at runtime.
+// The /api route handler proxies them to BACKEND_URL at runtime.
 // This avoids the build-time vs runtime problem with NEXT_PUBLIC_* variables on Render.
 const API_BASE = "";
 
